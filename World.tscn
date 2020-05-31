@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://World.gd" type="Script" id=1]
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://World/Brick.tscn" type="PackedScene" id=3]
+[ext_resource path="res://background.png" type="Texture" id=4]
+[ext_resource path="res://Camera.tscn" type="PackedScene" id=7]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 210.504, 232.76 )
+scale = Vector2( 7.57824, 8.27375 )
+texture = ExtResource( 4 )
+region_rect = Rect2( -5000, -5000, 10000, 10000 )
+
+[node name="Border" type="Node2D" parent="."]
+position = Vector2( 73.7393, 1.2605 )
+
+[node name="Map" type="Node2D" parent="."]
+position = Vector2( 73.7393, 1.2605 )
+
+[node name="Brick" parent="Map" instance=ExtResource( 3 )]
+position = Vector2( 65.5942, 93.7395 )
+
+[node name="Tanks" type="Node2D" parent="."]
+
+[node name="Player" parent="Tanks" instance=ExtResource( 2 )]
+position = Vector2( 140.099, 113.441 )
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Tanks/Player"]
+remote_path = NodePath("../../../Camera")
+
+[node name="Camera" parent="." instance=ExtResource( 7 )]
+position = Vector2( 140.099, 113.441 )
+current = true
+
+[node name="TopLeft" parent="Camera/Limits" index="0"]
+position = Vector2( -0.174301, 0.418915 )
+
+[node name="BottomRight" parent="Camera/Limits" index="1"]
+position = Vector2( 403.673, 346.829 )
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
+
+[editable path="Camera"]
