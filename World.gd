@@ -1,29 +1,35 @@
 extends Node2D
 
+const Tree = preload("res://World/Tree.tscn")
+const InvincibleBrick = preload("res://World/InvincibleBrick.tscn")
+const Brick = preload("res://World/Brick.tscn")
+const Tank = preload("res://Enemies/EnemyTank.tscn")
+
 export(bool) var debug = true
 
 const MAP_WIDTH = 384
 const MAP_HEIGHT = 384
 const TREE_SIZE = 16
 const BRICK_SIZE = 8
+const MAX_ENEMIES = 3
+
+const OFFSET = Vector2(8, 8)
 
 const ENEMY_SPAWN_LOCATIONS = [
-	Vector2(3, 3),
-	Vector2(10, 3),
-	Vector2(15, 3),
-	Vector2(20, 3)
+	(Vector2(3, 3) * TREE_SIZE) + OFFSET,
+	(Vector2(10, 3) * TREE_SIZE) + OFFSET,
+	(Vector2(15, 3) * TREE_SIZE) + OFFSET,
+	(Vector2(20, 3) * TREE_SIZE) + OFFSET
 ]
 
-const PLAYER_HOME_LOCATION = Vector2(12, 19)
-const PLAYER_SPAWN_LOCATION = Vector2(10, 20)
-
-const Tree = preload("res://World/Tree.tscn")
-const InvincibleBrick = preload("res://World/InvincibleBrick.tscn")
-const Brick = preload("res://World/Brick.tscn")
+const PLAYER_HOME_LOCATION = Vector2(12, 19) * TREE_SIZE
+const PLAYER_SPAWN_LOCATION = Vector2(10, 20) * TREE_SIZE
 
 onready var tanks = $Tanks
 onready var background = $Border
 onready var camera = $Camera
+
+var enemies = [];
 
 func _ready():
 	camera.update_limits(0, 0, MAP_WIDTH, MAP_HEIGHT)
@@ -35,12 +41,17 @@ func _ready():
 	add_rect_of_nodes(1, 1, horz_tiles - 1, vert_tiles - 1, TREE_SIZE, "spawnTree")
 	add_rect_of_nodes(2, 2, horz_tiles - 2, vert_tiles - 2, TREE_SIZE, "spawnInvincibleBrickBlock")
 	
-	spawnBrickBlock(3 * TREE_SIZE, 3 * TREE_SIZE)
-	spawnBrickBlock(20 * TREE_SIZE, 3 * TREE_SIZE)
-	spawnBrickBlock(3 * TREE_SIZE, 20 * TREE_SIZE)
-	spawnBrickBlock(20 * TREE_SIZE, 20 * TREE_SIZE)
+	spawnBrickBlock(4 * TREE_SIZE, 4 * TREE_SIZE)
+	spawnBrickBlock(19 * TREE_SIZE, 4 * TREE_SIZE)
+	spawnBrickBlock(4 * TREE_SIZE, 19 * TREE_SIZE)
+	spawnBrickBlock(19 * TREE_SIZE, 19 * TREE_SIZE)
 	
-	var levelData = ResourceLoader.load("res://Levels/level_1.tres")
+	# ' ' nothing
+	# # brick
+	# = water
+	# * tough brick
+	# + invincible brick
+	var levelData = ResourceLoader.load("res://Levels/level_1.tres") as TextFile
 	
 
 func _process(_delta):
@@ -106,4 +117,16 @@ func spawnBrickBlock(x, y):
 	spawnBlock(x, y, Brick)
 
 func _on_EnemySpawnTimer_timeout():
-	print("spawn")
+	if enemies.size() < MAX_ENEMIES:
+		var spawnAtIdx = rand_range(0,3)
+		var spawnAt = ENEMY_SPAWN_LOCATIONS[spawnAtIdx]
+		
+		var tank = Tank.instance()
+		tanks.add_child(tank)
+		tank.global_position = spawnAt
+		enemies.push_back(weakref(tank))
+
+func clear_up_tanks():
+	for item in enemies:
+		if !item.get_ref():
+			enemies.erase(item)

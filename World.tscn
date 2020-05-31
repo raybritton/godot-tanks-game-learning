@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://World/Brick.tscn" type="PackedScene" id=3]
 [ext_resource path="res://background.png" type="Texture" id=4]
 [ext_resource path="res://Camera.tscn" type="PackedScene" id=7]
 
@@ -20,9 +19,6 @@ position = Vector2( 73.7393, 1.2605 )
 
 [node name="Map" type="Node2D" parent="."]
 position = Vector2( 73.7393, 1.2605 )
-
-[node name="Brick" parent="Map" instance=ExtResource( 3 )]
-position = Vector2( 65.5942, 93.7395 )
 
 [node name="Tanks" type="Node2D" parent="."]
 

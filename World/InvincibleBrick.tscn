@@ -1,12 +1,18 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://World/invincible_brick.png" type="Texture" id=1]
+[ext_resource path="res://World/InvincibleBrick.gd" type="Script" id=2]
+[ext_resource path="res://Boxes/Hurtbox.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4.02395, 4.14804 )
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 3.92927, 4.14812 )
+
 [node name="InvincibleBrick" type="StaticBody2D"]
 collision_mask = 0
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -15,3 +21,13 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 3.96767, 4.06213 )
 shape = SubResource( 1 )
+
+[node name="Hurtbox" parent="." instance=ExtResource( 3 )]
+collision_mask = 32
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2( 3.96765, 3.96765 )
+shape = SubResource( 2 )
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+
+[editable path="Hurtbox"]
