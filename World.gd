@@ -41,17 +41,19 @@ func _ready():
 	add_rect_of_nodes(1, 1, horz_tiles - 1, vert_tiles - 1, TREE_SIZE, "spawnTree")
 	add_rect_of_nodes(2, 2, horz_tiles - 2, vert_tiles - 2, TREE_SIZE, "spawnInvincibleBrickBlock")
 	
-	spawnBrickBlock(4 * TREE_SIZE, 4 * TREE_SIZE)
-	spawnBrickBlock(19 * TREE_SIZE, 4 * TREE_SIZE)
-	spawnBrickBlock(4 * TREE_SIZE, 19 * TREE_SIZE)
-	spawnBrickBlock(19 * TREE_SIZE, 19 * TREE_SIZE)
+#	spawnBrickBlock(4 * TREE_SIZE, 4 * TREE_SIZE)
+#	spawnBrickBlock(19 * TREE_SIZE, 4 * TREE_SIZE)
+#	spawnBrickBlock(4 * TREE_SIZE, 19 * TREE_SIZE)
+#	spawnBrickBlock(19 * TREE_SIZE, 19 * TREE_SIZE)
+	
+	add_horz_line_of_nodes(4, 4, 19, TREE_SIZE, "spawnBrickBlock")
 	
 	# ' ' nothing
 	# # brick
 	# = water
 	# * tough brick
 	# + invincible brick
-	var levelData = ResourceLoader.load("res://Levels/level_1.tres") as TextFile
+#	var levelData = ResourceLoader.load("res://Levels/level_1.tres") as TextFile
 	
 
 func _process(_delta):
@@ -117,6 +119,7 @@ func spawnBrickBlock(x, y):
 	spawnBlock(x, y, Brick)
 
 func _on_EnemySpawnTimer_timeout():
+	clear_up_tanks()
 	if enemies.size() < MAX_ENEMIES:
 		var spawnAtIdx = rand_range(0,3)
 		var spawnAt = ENEMY_SPAWN_LOCATIONS[spawnAtIdx]

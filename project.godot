@@ -122,6 +122,7 @@ debug4={
 2d_physics/layer_5="EnemyHurtbox"
 2d_physics/layer_6="Shell"
 2d_physics/layer_7="WorldFloor"
+2d_physics/layer_8="ShellOnShell"
 
 [rendering]
 
