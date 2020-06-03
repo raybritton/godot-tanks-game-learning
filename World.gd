@@ -31,8 +31,10 @@ onready var background = $Border
 onready var camera = $Camera
 
 var enemies = [];
+var lastEnemySpawnIdx = -1
 
 func _ready():
+	randomize()
 	camera.update_limits(0, 0, MAP_WIDTH, MAP_HEIGHT)
 	
 	var horz_tiles = MAP_WIDTH / TREE_SIZE
@@ -163,7 +165,11 @@ func spawnBrickBlock(x, y):
 func _on_EnemySpawnTimer_timeout():
 	clear_up_tanks()
 	if enemies.size() < MAX_ENEMIES:
-		var spawnAtIdx = rand_range(0,3)
+		var spawnAtIdx = int(rand_range(0, 3))
+		while lastEnemySpawnIdx == spawnAtIdx:
+			spawnAtIdx = int(rand_range(0, 3))
+		lastEnemySpawnIdx = spawnAtIdx
+		
 		var spawnAt = ENEMY_SPAWN_LOCATIONS[spawnAtIdx]
 		
 		var tank = Tank.instance()
