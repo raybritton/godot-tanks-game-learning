@@ -3,6 +3,7 @@ extends Node2D
 const Tree = preload("res://World/Tree.tscn")
 const InvincibleBrick = preload("res://World/InvincibleBrick.tscn")
 const Brick = preload("res://World/Brick.tscn")
+const Water = preload("res://World/Water.tscn")
 const Tank = preload("res://Enemies/EnemyTank.tscn")
 
 export(bool) var debug = true
@@ -41,20 +42,56 @@ func _ready():
 	add_rect_of_nodes(1, 1, horz_tiles - 1, vert_tiles - 1, TREE_SIZE, "spawnTree")
 	add_rect_of_nodes(2, 2, horz_tiles - 2, vert_tiles - 2, TREE_SIZE, "spawnInvincibleBrickBlock")
 	
-#	spawnBrickBlock(4 * TREE_SIZE, 4 * TREE_SIZE)
-#	spawnBrickBlock(19 * TREE_SIZE, 4 * TREE_SIZE)
-#	spawnBrickBlock(4 * TREE_SIZE, 19 * TREE_SIZE)
-#	spawnBrickBlock(19 * TREE_SIZE, 19 * TREE_SIZE)
-	
-	add_horz_line_of_nodes(4, 4, 19, TREE_SIZE, "spawnBrickBlock")
-	
 	# ' ' nothing
-	# # brick
-	# = water
 	# * tough brick
-	# + invincible brick
 #	var levelData = ResourceLoader.load("res://Levels/level_1.tres") as TextFile
 	
+	var level = File.new()
+	level.open("res://Levels/level1.tres", level.READ)
+		
+	var data = []
+	while not level.eof_reached():
+		var line = level.get_line()
+		if line.begins_with("="):
+			data.push_back(line.substr(1))
+	
+	validate(data)
+	load_level(data)
+
+func validate(data):
+	var prefix = "Map parse error: "
+	if data.size() != 20:
+		push_error(prefix + "map must be 20 lines long")
+		get_tree().quit()
+	var lineIdx = 0
+	for line in data:
+		lineIdx = lineIdx + 1
+		if line.length() != 20:
+			push_error(prefix + "each map line must have 20 characters after the =")
+			get_tree().quit()	
+	if data[0].substr(0, 1) != " ":
+		push_error(prefix + "0, 0 must be empty")
+		get_tree().quit()
+	if data[0].substr(19, 1) != " ":
+		push_error(prefix + "19, 0 must be empty")
+		get_tree().quit()
+		
+func load_level(data):
+	var offset = 3
+	var lineIdx = -1
+	for line in data:
+		lineIdx = lineIdx + 1
+		for i in range(0, 19):
+			var x = (i + offset) * TREE_SIZE
+			var y = (lineIdx + offset) * TREE_SIZE
+			match line.substr(i, 1):
+				"#":
+					spawnBrickBlock(x, y)
+				"+":
+					spawnInvincibleBrickBlock(x, y)
+				"~":
+					spawnWater(x, y)
+		
 
 func _process(_delta):
 	if debug:
@@ -93,6 +130,11 @@ func spawnTree(x, y):
 	background.add_child(tree)
 	tree.global_position = Vector2(x, y)
 	tree.get_node("Sprite").flip_h = randf() > 0.5
+	
+func spawnWater(x, y):
+	var water = Water.instance()
+	background.add_child(water)
+	water.global_position = Vector2(x, y)
 	
 func spawnBlock(x, y, scene):
 	var invincibleBrickTL = scene.instance()
