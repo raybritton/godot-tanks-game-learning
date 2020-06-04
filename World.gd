@@ -29,6 +29,7 @@ const PLAYER_SPAWN_LOCATION = Vector2(10, 20) * TREE_SIZE
 onready var tanks = $Tanks
 onready var background = $Border
 onready var camera = $Camera
+onready var enemySpawnLocations = [$Map/EnemySpawnArea1, $Map/EnemySpawnArea2, $Map/EnemySpawnArea3, $Map/EnemySpawnArea4]
 
 var enemies = [];
 var lastEnemySpawnIdx = -1
@@ -36,6 +37,10 @@ var lastEnemySpawnIdx = -1
 func _ready():
 	randomize()
 	camera.update_limits(0, 0, MAP_WIDTH, MAP_HEIGHT)
+	
+	for i in range(0, 4):
+		enemySpawnLocations[i].position = ENEMY_SPAWN_LOCATIONS[i]
+		print(enemySpawnLocations[i].position)
 	
 	var horz_tiles = MAP_WIDTH / TREE_SIZE
 	var vert_tiles = MAP_HEIGHT / TREE_SIZE
@@ -165,10 +170,20 @@ func spawnBrickBlock(x, y):
 func _on_EnemySpawnTimer_timeout():
 	clear_up_tanks()
 	if enemies.size() < MAX_ENEMIES:
-		var spawnAtIdx = int(rand_range(0, 3))
-		while lastEnemySpawnIdx == spawnAtIdx:
-			spawnAtIdx = int(rand_range(0, 3))
-		lastEnemySpawnIdx = spawnAtIdx
+		
+		#make a list of empty spawn locations
+		var valid_spawns = [];
+		for i in range(0, 4):
+			if !enemySpawnLocations[i].is_full():
+				valid_spawns.push_front(i)
+				
+		#remove the last spawn location, if there's at least one other spawn location available
+		if valid_spawns.size() > 1:
+			for idx in valid_spawns:
+				if idx == lastEnemySpawnIdx:
+					valid_spawns.erase(idx)
+		
+		var spawnAtIdx = valid_spawns[rand_range(0, valid_spawns.size())]
 		
 		var spawnAt = ENEMY_SPAWN_LOCATIONS[spawnAtIdx]
 		

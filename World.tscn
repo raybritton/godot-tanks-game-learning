@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://World/EnemySpawnArea.tscn" type="PackedScene" id=3]
 [ext_resource path="res://background.png" type="Texture" id=4]
 [ext_resource path="res://Camera.tscn" type="PackedScene" id=7]
 
@@ -18,7 +19,14 @@ region_rect = Rect2( -5000, -5000, 10000, 10000 )
 position = Vector2( 73.7393, 1.2605 )
 
 [node name="Map" type="Node2D" parent="."]
-position = Vector2( 73.7393, 1.2605 )
+
+[node name="EnemySpawnArea1" parent="Map" instance=ExtResource( 3 )]
+
+[node name="EnemySpawnArea2" parent="Map" instance=ExtResource( 3 )]
+
+[node name="EnemySpawnArea3" parent="Map" instance=ExtResource( 3 )]
+
+[node name="EnemySpawnArea4" parent="Map" instance=ExtResource( 3 )]
 
 [node name="Tanks" type="Node2D" parent="."]
 
