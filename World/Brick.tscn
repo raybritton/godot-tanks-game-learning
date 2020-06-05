@@ -5,10 +5,10 @@
 [ext_resource path="res://Boxes/Hurtbox.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3.47542, 3.3961 )
+extents = Vector2( 4.1333, 4.12708 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 3.46612, 3.25922 )
+extents = Vector2( 4.12401, 3.99019 )
 
 [node name="Brick" type="StaticBody2D"]
 collision_mask = 0
