@@ -5,10 +5,10 @@
 [ext_resource path="res://Boxes/Hurtbox.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 4.3194, 4.25722 )
+extents = Vector2( 3.47542, 3.3961 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 4.41639, 4.35568 )
+extents = Vector2( 3.46612, 3.25922 )
 
 [node name="Brick" type="StaticBody2D"]
 collision_mask = 0
@@ -19,14 +19,15 @@ texture = ExtResource( 1 )
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 4.29278, 3.86349 )
+modulate = Color( 1, 0, 0.423529, 1 )
+position = Vector2( 4.00039, 4.15588 )
 shape = SubResource( 1 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 3 )]
 collision_mask = 32
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
-position = Vector2( 4.22898, 3.8728 )
+position = Vector2( 4.08278, 4.09209 )
 shape = SubResource( 2 )
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 

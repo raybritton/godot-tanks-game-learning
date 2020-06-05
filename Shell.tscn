@@ -8,7 +8,7 @@
 extents = Vector2( 0.507935, 2.25751 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 0.62701, 2.14943 )
+extents = Vector2( 0.507935, 2.14943 )
 
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 4.02069, 2.68527 )
