@@ -4,6 +4,8 @@ const Explosion = preload("res://Effects/Explosion.tscn")
 
 const SPEED = 2
 
+onready var hitbox = $Hitbox
+
 export(int) var damage = 1
 var direction = Vector2.ZERO
 
@@ -22,15 +24,19 @@ func _physics_process(_delta):
 
 	move_and_collide(direction * SPEED)
 
-#Hit tank/brick
+func set_as_enemy_shell():
+	hitbox.set_collision_mask_bit(3, true)
+
+func set_as_player_shell():
+	hitbox.set_collision_mask_bit(4, true)
+
 func _on_Hitbox_area_entered(_area):
 	queue_free()
 
-#Hit wall/tree
 func _on_Hitbox_body_entered(_body):
 	queue_free()
 
-func _on_ShellHitbox_area_entered(area):
+func _on_ShellHitbox_area_entered(_area):
 	var explosion = Explosion.instance()
 	get_parent().add_child(explosion)
 	explosion.scale = Vector2(0.5, 0.5)

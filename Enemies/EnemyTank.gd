@@ -22,6 +22,7 @@ onready var tank = $Tank
 onready var shootTimer = $ShootTimer
 onready var sprite = $Tank/AnimatedSprite
 
+var enabled = true
 var velocity = Vector2.ZERO
 var direction = Vector2.DOWN
 var state = State.IDLE
@@ -32,6 +33,8 @@ func _ready():
 	shootTimer.wait_time = get_wait_time()
 
 func _physics_process(delta):
+	if !enabled: 
+		return
 	if state == State.DRIVE:
 		sprite.playing = true
 		velocity = velocity.move_toward(direction * get_speed(), delta * get_speed() * 2)
@@ -43,6 +46,8 @@ func _physics_process(delta):
 		velocity = move_and_slide(velocity)
 
 func _on_ChangeStateTimer_timeout():
+	if !enabled: 
+		return
 	match int(rand_range(1, 8)):
 		1:
 			state = State.DRIVE
@@ -65,6 +70,9 @@ func _on_ChangeStateTimer_timeout():
 			sprite.playing = false
 
 func _on_Stats_on_zero_health():
+	die()
+	
+func die():
 	var explosion = Explosion.instance()
 	get_parent().add_child(explosion)
 	explosion.global_position = global_position
@@ -102,5 +110,7 @@ func get_wait_time():
 			return 1.2
 
 func _on_ShootTimer_timeout():
+	if !enabled: 
+		return
 	if state == State.IDLE:
-		tank.fire_shell(global_position, direction)
+		tank.fire_shell(global_position, direction, false)

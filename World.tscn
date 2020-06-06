@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://World.gd" type="Script" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://World/EnemySpawnArea.tscn" type="PackedScene" id=3]
 [ext_resource path="res://background.png" type="Texture" id=4]
 [ext_resource path="res://Camera.tscn" type="PackedScene" id=7]
 
@@ -20,13 +19,7 @@ position = Vector2( 73.7393, 1.2605 )
 
 [node name="Map" type="Node2D" parent="."]
 
-[node name="EnemySpawnArea1" parent="Map" instance=ExtResource( 3 )]
-
-[node name="EnemySpawnArea2" parent="Map" instance=ExtResource( 3 )]
-
-[node name="EnemySpawnArea3" parent="Map" instance=ExtResource( 3 )]
-
-[node name="EnemySpawnArea4" parent="Map" instance=ExtResource( 3 )]
+[node name="Powerups" type="Node2D" parent="."]
 
 [node name="Tanks" type="Node2D" parent="."]
 
@@ -35,6 +28,8 @@ position = Vector2( 140.099, 113.441 )
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="Tanks/Player"]
 remote_path = NodePath("../../../Camera")
+
+[node name="TopLayer" type="Node2D" parent="."]
 
 [node name="Camera" parent="." instance=ExtResource( 7 )]
 position = Vector2( 140.099, 113.441 )
@@ -49,6 +44,10 @@ position = Vector2( 403.673, 346.829 )
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 wait_time = 4.0
 autostart = true
+
+[node name="PickupSpawnTimer" type="Timer" parent="."]
+one_shot = true
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
+[connection signal="timeout" from="PickupSpawnTimer" to="." method="_on_PickupSpawnTimer_timeout"]
 
 [editable path="Camera"]

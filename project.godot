@@ -19,6 +19,10 @@ config/name="Tanks"
 run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+System="*res://System.gd"
+
 [display]
 
 window/size/width=320

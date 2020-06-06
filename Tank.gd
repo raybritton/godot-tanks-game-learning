@@ -19,7 +19,7 @@ func _on_Stats_shielded_changed(value):
 	else:
 		sprite.modulate = Color(1, 1, 1)
 
-func fire_shell(position, direction):
+func fire_shell(position, direction, from_player):
 	clear_up_shells_in_flight()
 	if shells_in_flight.size() < stats.max_shells_in_flight:
 		var shell_pos_offset = 10
@@ -30,6 +30,10 @@ func fire_shell(position, direction):
 		shell.global_position[1] += direction[1] * shell_pos_offset
 		shell.damage = stats.damage
 		shell.direction = direction
+		if from_player:
+			shell.set_as_player_shell()
+		else:
+			shell.set_as_enemy_shell()
 		shells_in_flight.push_back(weakref(shell))
 
 func clear_up_shells_in_flight():

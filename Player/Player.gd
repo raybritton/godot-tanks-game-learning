@@ -6,6 +6,7 @@ const TIME_BETWEEN_FIRING = 0.5
 
 onready var sprite = $Tank/AnimatedSprite
 onready var tank = $Tank
+onready var stats = $Tank/Stats
 onready var cannonTimer = $CannonTimer
 
 var allowed_to_fire = true
@@ -36,7 +37,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("shoot"):
 		if allowed_to_fire:
 			allowed_to_fire = false
-			tank.fire_shell(global_position, last_input)
+			tank.fire_shell(global_position, last_input, true)
 			cannonTimer.start()
 
 func update_velocity(degrees, vector_idx_to_clear, delta, input_vector):
@@ -61,3 +62,9 @@ func _on_Stats_max_shells_in_flight_changed(value):
 			sprite.play("Upgrade1")
 		3:
 			sprite.play("Upgrade2")
+			
+func activate_shield():
+	stats.set_shielded(true)
+	
+func increase_firepower():
+	stats.set_max_shells_in_flight(stats.max_shells_in_flight + 1)
